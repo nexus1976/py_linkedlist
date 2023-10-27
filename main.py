@@ -1,59 +1,67 @@
 from typing_extensions import Self
 
 class Node():
+    # this is our Node constructor (note that constructors return null)
     def __init__(self, id: int, name: str) -> None:
-        self._id:int = id
-        self._name:str = name
-        self._next:Self = None
+        self._id: int = id
+        self._name: str = name
+
+        # python is kind of weird in this area...since we want the next property to also be a Node object, python doesn't allow us to 
+        # simply reference the datatype "Node" when initializing the private memory variable self._next. In other languages like Java or C#, the following would work:
+        # self._next: Node = None # but python doesn't like this...however python still facilitates what we need here with this Self type. 
+        # So in our case here, Self is Node class type. 
+        self._next: Self = None
 
     @property
     def id(self) -> int:
         return self._id
     @id.setter
-    def id(self, value:int):
+    def id(self, value: int):
         self._id = value
 
     @property
     def name(self) -> str:
         return self._name
     @name.setter
-    def name(self, value:str):
+    def name(self, value: str):
         self._name = value
 
     @property
     def next(self) -> Self:
         return self._next
     @next.setter
-    def next(self, value:Self):
+    def next(self, value: Self):
         self._next = value
 
 class LinkedList():
+    # this is our LinkedList constructor (note that constructors return null)
     def __init__(self) -> None:
+        # here we're initializing a dictionary to store node objects where the key is the id of the node being stored
         self._nodeList: dict[int, Node] = {}
+
+        # here we're initializing a dictionary to store node ids where the key is the position of the node id being stored
         self._nodePos: dict[int, int] = {}
 
+    # this is our addNode method (note that it returns null)
     def addNode(self, node:Node) -> None:
         # We need to dedupe the node being passed in...gotta be unique
-        found: bool = False
-        if node is not None:
-            for x in self._nodeList.keys():
-                if x == node.id:
-                    found = True
-            if not found:
-                pos = len(self._nodeList) + 1
-                self._nodePos[pos] = node.id
-                self._nodeList[node.id] = node
+        if node is not None:  # ensure that a good node object was passed in
+            # to dedupe, we establish a found boolean variable by checking the id of the node against the _nodeList dictionary using the in operator
+            # with python dictionaries, you can use the in operator to check if a key exists in it and it's much faster than a for loop (it's O(n) operation)
+            found: bool = node.id in self._nodeList
+            if not found: # so we only do anything if the node wasn't found
+                pos = len(self._nodeList) + 1  # here we're calculating the new position of the node we're adding (which is the last position + 1) / the last position is the same as the length of the node dictionary
+                self._nodePos[pos] = node.id  # here we're adding the node id to the position dictionary using the newly calculated position as the key
+                self._nodeList[node.id] = node  # here we're adding the node itself to the node dictionary using the node id as the key
                 
-                if pos > 1:
-                    prevNodePos = pos - 1
-                    prevNodeId = self._nodePos[prevNodePos]
-                    prevNode = self._nodeList[prevNodeId]
-                    prevNode.next = node
+                # if the node that we've just added isn't the very first node in our linked list, then we need to get the previous node and point its
+                # next property to our newly added node (this is why we're keeping track of the nodes' positions)
+                if pos > 1:  # so we can know if we're dealing with NOT the first node if the position that we've calculated is beyond the 1st position
+                    prevNodePos = pos - 1  # here we're calculating the previous position
+                    prevNodeId = self._nodePos[prevNodePos]  # here we're getting the node id that's in the previous position that we've calculated
+                    prevNode = self._nodeList[prevNodeId]  # here we're getting the previous node using the node id that we found from the last line
+                    prevNode.next = node  # here's we're setting the next property of that previous node to the node that we're adding here
         
-        # Add node to internal list
-        # Ensure last node in list has its next property pointed to this node being added
-        pass
-
 
 node1 = Node(1, 'Mike')
 node2 = Node(2, 'Mary')
@@ -66,11 +74,4 @@ myLL.addNode(node1)
 myLL.addNode(node2)
 myLL.addNode(node3)
 myLL.addNode(node4)
-myLL.addNode(node11) # this should NOT succeed because node1 has already been added (and so it's not unique)
-
-myVar: str = 'hello world'
-
-# myList = [node1, node2, node3, node4]
-# myList[0].name = 'Mike2'
-# print(f'node1.name equals: {node1.name}')
-
+myLL.addNode(node11) # this will NOT succeed because node1 has already been added (and so it's not unique)
