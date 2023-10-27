@@ -60,9 +60,9 @@ class LinkedList():
                     prevNodePos = pos - 1  # here we're calculating the previous position
                     prevNodeId = self._nodePos[prevNodePos]  # here we're getting the node id that's in the previous position that we've calculated
                     prevNode = self._nodeList[prevNodeId]  # here we're getting the previous node using the node id that we found from the last line
-                    prevNode.next = node  # here's we're setting the next property of that previous node to the node that we're adding here
+                    prevNode.next = node  # here we're taking that previous node that we found from the last line and seting its next property to the node that we've been adding in this method
         
-
+# This code marks the beginning of code that is outside of any classes and so now we're just instantiating new nodes and adding them to a new LinkedList object
 node1 = Node(1, 'Mike')
 node2 = Node(2, 'Mary')
 node3 = Node(3, 'Felicity')
@@ -74,4 +74,4 @@ myLL.addNode(node1)
 myLL.addNode(node2)
 myLL.addNode(node3)
 myLL.addNode(node4)
-myLL.addNode(node11) # this will NOT succeed because node1 has already been added (and so it's not unique)
+myLL.addNode(node11) # this will NOT succeed because node1 has already been added and they both have the same node id of 1 (and so it's not unique)
