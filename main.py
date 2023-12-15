@@ -27,11 +27,12 @@ class Node():
         self._name = value
 
     @property
-    def next(self) -> Self:
+    def next(self) -> Self | None:
         return self._next
     @next.setter
-    def next(self, value: Self):
+    def next(self, value: Self | None):
         self._next = value
+
 
 class LinkedList():
     # this is our LinkedList constructor (note that constructors return null)
@@ -69,9 +70,12 @@ node3 = Node(3, 'Felicity')
 node4 = Node(4, 'Daniel')
 node11 = Node(1, 'Mikey')
 
+
 myLL = LinkedList()
 myLL.addNode(node1)
 myLL.addNode(node2)
 myLL.addNode(node3)
 myLL.addNode(node4)
 myLL.addNode(node11) # this will NOT succeed because node1 has already been added and they both have the same node id of 1 (and so it's not unique)
+
+
